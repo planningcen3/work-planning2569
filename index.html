@@ -119,7 +119,8 @@
                     <span class="text-purple-900 font-black text-lg">PEA</span>
                 </div>
                 <div>
-                    <h2 class="font-bold text-base leading-tight">ระบบติดตามแผนงานก่อสร้างและปรับปรุงระบบจำหน่าย</h2>
+                    <h2 class="font-bold text-base leading-tight">แผนงานปรับปรุงระบบจำหน่ายแรงสูงในความรับผิดชอบของ
+                        กวว.(ก3)</h2>
                 </div>
             </div>
             <button onclick="fetchData()"
@@ -138,7 +139,7 @@
                 <div class="flex justify-between items-start mb-2">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">แผนงานทั้งหมด</p>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">แผนงานทั้งหมด</p>
                             <!-- Dropdown หลัก เปลี่ยนแปลงที่นี่จะอัปเดตทั้ง Dashboard -->
                             <select id="budgetFilterBox1" onchange="updateDashboard()"
                                 class="mini-select bg-indigo-50 border-indigo-100 text-indigo-700 py-0 h-5 px-2 text-[10px]">
@@ -154,12 +155,12 @@
                 </div>
                 <div class="mt-auto grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
                     <div>
-                        <p class="text-[9px] text-gray-400 uppercase font-bold">ปริมาณงานรวม</p>
+                        <p class="text-[11px] text-gray-400 uppercase font-bold">ปริมาณงานรวม</p>
                         <h3 class="text-sm font-black text-indigo-600 truncate"><span id="total-km">0.00</span> <span
-                                class="text-[9px] font-normal text-gray-400">วงจร-กม.</span></h3>
+                                class="text-[11px] font-normal text-gray-400">วงจร-กม.</span></h3>
                     </div>
                     <div>
-                        <p class="text-[9px] text-gray-400 uppercase font-bold">งบประมาณรวม</p>
+                        <p class="text-[11px] text-gray-400 uppercase font-bold">งบประมาณรวม</p>
                         <h3 class="text-sm font-black text-indigo-600 truncate" id="total-budget">0.00</h3>
                     </div>
                 </div>
@@ -170,7 +171,7 @@
                 <div class="flex justify-between items-start mb-2">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
                                 จัดสรรเข้าโครงการแล้ว</p>
                         </div>
                         <h3 class="text-3xl font-black text-emerald-600 leading-none mt-1" id="count-allocated">0</h3>
@@ -179,13 +180,13 @@
                 </div>
                 <div class="mt-auto grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
                     <div>
-                        <p class="text-[9px] text-gray-400 uppercase font-bold">ปริมาณงาน</p>
+                        <p class="text-[11px] text-gray-400 uppercase font-bold">ปริมาณงาน</p>
                         <h3 class="text-sm font-black text-emerald-600 truncate"><span id="allocated-km">0.00</span>
-                            <span class="text-[9px] font-normal text-gray-400">วงจร-กม.</span>
+                            <span class="text-[11px] font-normal text-gray-400">วงจร-กม.</span>
                         </h3>
                     </div>
                     <div>
-                        <p class="text-[9px] text-gray-400 uppercase font-bold">งบที่ใช้</p>
+                        <p class="text-[11px] text-gray-400 uppercase font-bold">งบที่ใช้</p>
                         <h3 class="text-sm font-black text-emerald-600 truncate" id="allocated-budget-box">0.00</h3>
                     </div>
                 </div>
@@ -196,7 +197,7 @@
                 <div class="flex justify-between items-start mb-2">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
                                 ยังไม่ได้จัดสรรโครงการ</p>
                         </div>
                         <h3 class="text-3xl font-black text-amber-600 leading-none mt-1" id="count-pending">0</h3>
@@ -205,12 +206,12 @@
                 </div>
                 <div class="mt-auto grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
                     <div>
-                        <p class="text-[9px] text-gray-400 uppercase font-bold">ปริมาณงาน</p>
+                        <p class="text-[11px] text-gray-400 uppercase font-bold">ปริมาณงาน</p>
                         <h3 class="text-sm font-black text-amber-600 truncate"><span id="pending-km">0.00</span> <span
-                                class="text-[9px] font-normal text-gray-400">วงจร-กม.</span></h3>
+                                class="text-[11px] font-normal text-gray-400">วงจร-กม.</span></h3>
                     </div>
                     <div>
-                        <p class="text-[9px] text-gray-400 uppercase font-bold">งบคงเหลือ</p>
+                        <p class="text-[11px] text-gray-400 uppercase font-bold">งบคงเหลือ</p>
                         <h3 class="text-sm font-black text-amber-600 truncate" id="pending-budget-box">0.00</h3>
                     </div>
                 </div>
@@ -354,8 +355,7 @@
             <!-- กล่องที่ 4: กราฟแท่งแสดงจำนวนงานแยกตาม กฟฟ. -->
             <div class="glass-card p-6 lg:col-span-2 flex flex-col">
                 <div class="flex justify-between items-center mb-4">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">จำนวนงานแยกตาม กฟฟ.
-                        (เรียงจากมากไปน้อย)</p>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">จำนวนงานแยกตาม กฟฟ.</p>
                     <i class="fas fa-chart-bar text-purple-400 text-lg"></i>
                 </div>
                 <div class="relative flex-1 w-full min-h-[250px]">
@@ -384,16 +384,16 @@
             </div>
             <div class="overflow-x-auto overflow-y-auto max-h-[600px] custom-scrollbar">
                 <table class="w-full text-left text-xs">
-                    <thead class="bg-gray-50 border-b border-gray-100 sticky top-0 z-20">
+                    <thead class="bg-purple-200 text-purple-950 sticky top-0 z-20 border-b border-purple-300">
                         <tr>
-                            <th class="p-4 font-bold text-gray-400 uppercase text-center w-20">ลำดับ</th>
-                            <th class="p-4 font-bold text-gray-400 uppercase">กฟฟ.</th>
-                            <th class="p-4 font-bold text-gray-400 uppercase">ชื่อโครงการ</th>
-                            <th class="p-4 font-bold text-gray-400 uppercase text-center">ปริมาณ (วงจร-กม.)</th>
-                            <th class="p-4 font-bold text-gray-400 uppercase text-center">งบประมาณ (ล้านบาท)</th>
-                            <th class="p-4 font-bold text-gray-400 uppercase text-center">สถานะการจัดสรร</th>
-                            <th class="p-4 font-bold text-gray-400 uppercase text-center">สถานะงาน</th>
-                            <th class="p-4 font-bold text-gray-400 uppercase text-center">รายละเอียด</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase text-center w-20">ลำดับ</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase">กฟฟ.</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase">รายชื่องาน</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase text-center">ปริมาณ<br>(วงจร-กม.)</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase text-center">งบประมาณ<br>(บาท)</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase text-center">สถานะการจัดสรร</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase text-center">สถานะงาน</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase text-center">รายละเอียด</th>
                         </tr>
                     </thead>
                     <tbody id="dataTableBody" class="divide-y divide-gray-50 text-gray-600">
@@ -955,7 +955,7 @@
                     <tr class="hover:bg-purple-50/30 transition-colors border-b border-gray-50">
                         <td class="p-4 text-center font-bold text-purple-900 bg-purple-50/20 w-20">${d.id}</td>
                         <td class="p-4 font-bold text-gray-700">${d.dept}</td>
-                        <td class="p-4 text-gray-500">${d.title}</td>
+                        <td class="p-4 text-black">${d.title}</td>
                         <td class="p-4 text-center font-black text-indigo-600">${d.km.toFixed(2)}</td>
                         <td class="p-4 text-center font-black text-gray-800">${d.budget.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                         <td class="p-4 text-center">
@@ -1080,7 +1080,7 @@
                     </div>
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">งบประมาณ</p>
-                        <p class="text-lg font-black text-emerald-600">${project.budget.toLocaleString(undefined, { minimumFractionDigits: 2 })} <span class="text-xs text-gray-500 font-normal">ล้านบาท</span></p>
+                        <p class="text-lg font-black text-emerald-600">${project.budget.toLocaleString(undefined, { minimumFractionDigits: 2 })} <span class="text-xs text-gray-500 font-normal">บาท</span></p>
                     </div>
 
                     <div class="md:col-span-2 bg-purple-50 p-4 rounded-xl border border-purple-100">
