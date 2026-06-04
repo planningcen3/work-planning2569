@@ -877,8 +877,14 @@
                                     // Toggle: if clicked on the already selected dept, reset to 'all'
                                     const nextDept = (currentDept === label) ? 'all' : label;
 
-                                    document.getElementById('deptFilter').value = nextDept;
-                                    onDeptChange('deptFilter');
+                                    if (nextDept === 'all') {
+                                        setStatsView('general');
+                                    } else {
+                                        document.getElementById('deptFilter').value = nextDept;
+                                        document.getElementById('statsDeptSelector').value = nextDept;
+                                        setStatsView('dept');
+                                        onDeptChange('deptFilter');
+                                    }
                                 }
                             }
                         },
