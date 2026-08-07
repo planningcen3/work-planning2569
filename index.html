@@ -46,12 +46,12 @@
 
         .bg-allocated {
             background-color: #dcfce7;
-            color: #15803d;
+            color: #000000;
         }
 
         .bg-pending {
             background-color: #fef9c3;
-            color: #854d0e;
+            color: #000000;
         }
 
         .custom-scrollbar::-webkit-scrollbar {
@@ -135,84 +135,133 @@
         <!-- Metrics Row -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Box 1: Overview -->
-            <div class="glass-card p-6 border-l-4 border-indigo-500">
-                <div class="flex justify-between items-start mb-2">
+            <div id="card1-container" onclick="setCard2Filter(false)"
+                class="glass-card p-4 border-l-4 border-indigo-500 cursor-pointer hover:shadow-md transition-all hover:scale-[1.01] active:scale-[0.99] duration-200 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-1.5">
                     <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">แผนงานทั้งหมด</p>
+                        <div class="flex items-center gap-1.5 mb-0.5">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">แผนงานตาม FS</p>
                             <!-- Dropdown หลัก เปลี่ยนแปลงที่นี่จะอัปเดตทั้ง Dashboard -->
-                            <select id="budgetFilterBox1" onchange="updateDashboard()"
-                                class="mini-select bg-indigo-50 border-indigo-100 text-indigo-700 py-0 h-5 px-2 text-[10px]">
-                                <option value="all">รวมทุกงบ</option>
-                                <option value="คปอ.1">คปอ.1</option>
-                                <option value="2569">งบลงทุนปี 2569</option>
-                                <option value="none">ยังไม่มีแผนงาน</option>
+                            <select id="budgetFilterBox1" onchange="onBudgetFilterChange('budgetFilterBox1')"
+                                onclick="event.stopPropagation()"
+                                class="mini-select bg-indigo-50 border-indigo-100 text-indigo-700 py-0 h-5 px-1.5 text-[10px] max-w-[120px] truncate">
+                                <option value="all">รวมทุกงบ/โครงการ</option>
                             </select>
                         </div>
-                        <h3 class="text-3xl font-black text-gray-800 leading-none mt-1" id="total-count">0</h3>
+                        <h3 class="text-3xl font-black text-gray-800 leading-none mt-0.5" id="total-count">0</h3>
                     </div>
-                    <i class="fas fa-list-ol text-indigo-400 text-lg"></i>
+                    <i class="fas fa-list-ol text-indigo-400 text-base"></i>
                 </div>
-                <div class="mt-auto grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
+                <div class="mt-auto grid grid-cols-2 gap-3 pt-3 border-t border-gray-50">
                     <div>
-                        <p class="text-[11px] text-gray-400 uppercase font-bold">ปริมาณงานรวม</p>
+                        <p class="text-xs text-gray-400 uppercase font-bold">ปริมาณงานรวม</p>
                         <h3 class="text-sm font-black text-indigo-600 truncate"><span id="total-km">0.00</span> <span
-                                class="text-[11px] font-normal text-gray-400">วงจร-กม.</span></h3>
+                                class="text-[10px] font-normal text-gray-400">วงจร-กม.</span></h3>
                     </div>
                     <div>
-                        <p class="text-[11px] text-gray-400 uppercase font-bold">งบประมาณรวม</p>
+                        <p class="text-xs text-gray-400 uppercase font-bold">งบประมาณรวม</p>
                         <h3 class="text-sm font-black text-indigo-600 truncate" id="total-budget">0.00</h3>
                     </div>
                 </div>
             </div>
 
-            <!-- Box 2: Allocated -->
-            <div class="glass-card p-6 border-l-4 border-emerald-500">
-                <div class="flex justify-between items-start mb-2">
+            <!-- Box 1.5: AF/AG Overview -->
+            <div id="card2-container-box" onclick="setCard2Filter(true)"
+                class="glass-card p-4 border-l-4 border-purple-500 cursor-pointer hover:shadow-md transition-all hover:scale-[1.01] active:scale-[0.99] duration-200 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-1.5">
                     <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                                จัดสรรเข้าโครงการแล้ว</p>
+                        <div class="flex items-center gap-1.5 mb-0.5">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">แผนการดำเนินงานจริง
+                            </p>
+                            <select id="budgetFilterBox2" onchange="onBudgetFilterChange('budgetFilterBox2')"
+                                onclick="event.stopPropagation()"
+                                class="mini-select bg-purple-50 border-purple-100 text-purple-700 py-0 h-5 px-1.5 text-[10px] max-w-[120px] truncate">
+                                <option value="all">รวมทุกงบ/โครงการ</option>
+                            </select>
                         </div>
-                        <h3 class="text-3xl font-black text-emerald-600 leading-none mt-1" id="count-allocated">0</h3>
+                        <h3 class="text-3xl font-black text-gray-800 leading-none mt-0.5" id="total-count-new">0</h3>
                     </div>
-                    <i class="fas fa-check-double text-emerald-400 text-lg"></i>
+                    <i class="fas fa-chart-pie text-purple-400 text-base"></i>
                 </div>
-                <div class="mt-auto grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
+                <div class="mt-auto grid grid-cols-2 gap-3 pt-3 border-t border-gray-50">
                     <div>
-                        <p class="text-[11px] text-gray-400 uppercase font-bold">ปริมาณงาน</p>
-                        <h3 class="text-sm font-black text-emerald-600 truncate"><span id="allocated-km">0.00</span>
-                            <span class="text-[11px] font-normal text-gray-400">วงจร-กม.</span>
+                        <p class="text-xs text-gray-400 uppercase font-bold">ปริมาณงาน</p>
+                        <h3 class="text-sm font-black text-purple-600 truncate"><span id="total-km-new">0.00</span>
+                            <span class="text-[10px] font-normal text-gray-400">วงจร-กม.</span>
                         </h3>
                     </div>
                     <div>
-                        <p class="text-[11px] text-gray-400 uppercase font-bold">งบที่ใช้</p>
-                        <h3 class="text-sm font-black text-emerald-600 truncate" id="allocated-budget-box">0.00</h3>
+                        <p class="text-xs text-gray-400 uppercase font-bold">งบประมาณ</p>
+                        <h3 class="text-sm font-black text-purple-600 truncate" id="total-budget-new">0.00</h3>
                     </div>
                 </div>
             </div>
 
-            <!-- Box 3: Pending -->
-            <div class="glass-card p-6 border-l-4 border-amber-500">
-                <div class="flex justify-between items-start mb-2">
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                                ยังไม่ได้จัดสรรโครงการ</p>
-                        </div>
-                        <h3 class="text-3xl font-black text-amber-600 leading-none mt-1" id="count-pending">0</h3>
-                    </div>
-                    <i class="fas fa-pause-circle text-amber-400 text-lg"></i>
+            <!-- Box 3: Project Status (Combined) -->
+            <div class="glass-card p-4 border-l-4 border-blue-500 flex flex-col justify-between">
+                <div class="flex items-center gap-2 mb-2">
+                    <p class="text-sm font-bold text-gray-400 uppercase tracking-widest">สถานะการจัดงานเข้าโครงการ</p>
                 </div>
-                <div class="mt-auto grid grid-cols-2 gap-4 pt-4 border-t border-gray-50">
-                    <div>
-                        <p class="text-[11px] text-gray-400 uppercase font-bold">ปริมาณงาน</p>
-                        <h3 class="text-sm font-black text-amber-600 truncate"><span id="pending-km">0.00</span> <span
-                                class="text-[11px] font-normal text-gray-400">วงจร-กม.</span></h3>
+                <div class="grid grid-cols-3 gap-2">
+                    <!-- Row 1: จัดสรรเข้าโครงการแล้ว -->
+                    <div
+                        class="flex justify-between items-center p-2 bg-emerald-50 rounded-lg border border-emerald-100 col-span-1">
+                        <div>
+                            <h4 class="font-bold text-emerald-800 text-xs truncate">จัดสรรแล้ว</h4>
+                            <p class="text-[10px] text-emerald-600 mt-0.5 leading-tight">
+                                งาน: <span id="allocated-km" class="font-bold">0.00</span> กม.<br>
+                                งบ: <span id="allocated-budget-box" class="font-bold">0.00</span> บาท
+                            </p>
+                        </div>
+                        <div class="text-lg font-black text-emerald-600 ml-1" id="count-allocated">0</div>
                     </div>
-                    <div>
-                        <p class="text-[11px] text-gray-400 uppercase font-bold">งบคงเหลือ</p>
-                        <h3 class="text-sm font-black text-amber-600 truncate" id="pending-budget-box">0.00</h3>
+                    <!-- Row 2: อยู่ระหว่างจัดสรรเข้าโครงการ -->
+                    <div
+                        class="flex justify-between items-center p-2 bg-amber-50 rounded-lg border border-amber-100 col-span-1">
+                        <div>
+                            <h4 class="font-bold text-amber-800 text-xs truncate">อยู่ระหว่างจัดสรร</h4>
+                            <p class="text-[10px] text-amber-600 mt-0.5 leading-tight">
+                                งาน: <span id="in-progress-km" class="font-bold">0.00</span> กม.<br>
+                                งบ: <span id="in-progress-budget-box" class="font-bold">0.00</span> บาท
+                            </p>
+                        </div>
+                        <div class="text-lg font-black text-amber-600 ml-1" id="count-in-progress">0</div>
+                    </div>
+                    <!-- Row 3: ยังไม่ได้จัดสรรเข้าโครงการ -->
+                    <div
+                        class="flex justify-between items-center p-2 bg-gray-100 rounded-lg border border-gray-200 col-span-1">
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-xs truncate">ยังไม่ได้จัดสรร</h4>
+                            <p class="text-[10px] text-gray-600 mt-0.5 leading-tight">
+                                งาน: <span id="pending-km" class="font-bold">0.00</span> กม.<br>
+                                งบ: <span id="pending-budget-box" class="font-bold">0.00</span> บาท
+                            </p>
+                        </div>
+                        <div class="text-lg font-black text-gray-600 ml-1" id="count-pending">0</div>
+                    </div>
+                    <!-- Row 4: เปลี่ยนไปดำเนินการในงานย่อย -->
+                    <div
+                        class="flex justify-between items-center p-2 bg-yellow-50 rounded-lg border border-yellow-100 col-span-2">
+                        <div>
+                            <h4 class="font-bold text-yellow-800 text-xs truncate">เปลี่ยนไปดำเนินการในงานย่อย</h4>
+                            <p class="text-[10px] text-yellow-600 mt-0.5 leading-tight">
+                                งาน: <span id="subtask-km" class="font-bold">0.00</span> กม. |
+                                งบ: <span id="subtask-budget-box" class="font-bold">0.00</span> บาท
+                            </p>
+                        </div>
+                        <div class="text-lg font-black text-yellow-600 ml-1" id="count-subtask">0</div>
+                    </div>
+                    <!-- Row 5: ยกเลิกงาน -->
+                    <div
+                        class="flex justify-between items-center p-2 bg-rose-50 rounded-lg border border-rose-100 col-span-1">
+                        <div>
+                            <h4 class="font-bold text-rose-800 text-xs truncate">ยกเลิกงาน</h4>
+                            <p class="text-[10px] text-rose-600 mt-0.5 leading-tight">
+                                งาน: <span id="cancelled-km" class="font-bold">0.00</span> กม.<br>
+                                งบ: <span id="cancelled-budget-box" class="font-bold">0.00</span> บาท
+                            </p>
+                        </div>
+                        <div class="text-lg font-black text-rose-600 ml-1" id="count-cancelled">0</div>
                     </div>
                 </div>
             </div>
@@ -220,135 +269,15 @@
 
         <!-- รายละเอียดสถานะ -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="glass-card p-6 border-l-4 border-blue-500 lg:col-span-1">
-                <div class="flex justify-between items-center mb-4">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">สถานะงานและการดำเนินการ</p>
-                    <div class="flex bg-gray-100 p-1 rounded-lg">
-                        <button id="toggleGeneral" onclick="setStatsView('general')"
-                            class="toggle-btn toggle-active">ภาพรวม</button>
-                        <button id="toggleDept" onclick="setStatsView('dept')"
-                            class="toggle-btn toggle-inactive ml-1">ราย กฟฟ.</button>
-                    </div>
+            <!-- Box 4: Dynamic AE Status -->
+            <div class="glass-card p-6 border-l-4 border-blue-500 flex flex-col justify-between lg:col-span-1"
+                id="card4-container">
+                <div class="flex items-center gap-2 mb-3">
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest" id="card4-title">
+                        สถานะการดำเนินงานตาม FS</p>
                 </div>
-
-                <!-- View 1: General Stats -->
-                <div id="statsGeneralView" class="flex flex-col flex-1 space-y-2">
-                    <div id="filter-card-not-started" onclick="toggleWorkStatusFilter('not_started')"
-                        class="filter-card bg-slate-50 px-3 py-2 rounded-lg border border-gray-100 flex flex-col"
-                        title="คลิกเพื่อดูเฉพาะงานที่ยังไม่ดำเนินการ">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-[10px] font-bold text-gray-500 uppercase">ยังไม่ดำเนินการ</span>
-                            <span class="text-xs font-black text-gray-700" id="status-not-started-count">0 งาน</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs font-bold text-gray-400"><span id="status-not-started-km"
-                                    class="text-gray-600">0.00</span> วงจร-กม.</span>
-                        </div>
-                    </div>
-
-                    <div id="filter-card-surveying" onclick="toggleWorkStatusFilter('surveying')"
-                        class="filter-card bg-blue-50 px-3 py-2 rounded-lg border border-blue-100 flex flex-col"
-                        title="คลิกเพื่อดูเฉพาะงานสำรวจ/ประมาณการ">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-[10px] font-bold text-blue-500 uppercase">สำรวจ/ประมาณการ</span>
-                            <span class="text-xs font-black text-blue-600" id="status-surveying-count">0 งาน</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs font-bold text-blue-300"><span id="status-surveying-km"
-                                    class="text-blue-600">0.00</span> วงจร-กม.</span>
-                        </div>
-                    </div>
-
-                    <div id="filter-card-approved" onclick="toggleWorkStatusFilter('approved')"
-                        class="filter-card bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-100 flex flex-col"
-                        title="คลิกเพื่อดูเฉพาะงานที่อนุมัติแล้ว">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-[10px] font-bold text-emerald-500 uppercase">อนุมัติแล้ว</span>
-                            <span class="text-xs font-black text-emerald-600" id="status-approved-count">0 งาน</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs font-bold text-emerald-300"><span id="status-approved-km"
-                                    class="text-emerald-600">0.00</span> วงจร-กม.</span>
-                        </div>
-                    </div>
-
-                    <div id="filter-card-cancelled" onclick="toggleWorkStatusFilter('cancelled')"
-                        class="filter-card bg-rose-50 px-3 py-2 rounded-lg border border-rose-100 flex flex-col"
-                        title="คลิกเพื่อดูเฉพาะงานที่ยกเลิกงาน">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-[10px] font-bold text-rose-500 uppercase">ยกเลิกงาน</span>
-                            <span class="text-xs font-black text-rose-600" id="status-cancelled-count">0 งาน</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs font-bold text-rose-300"><span id="status-cancelled-km"
-                                    class="text-rose-600">0.00</span> วงจร-กม.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- View 2: Dept Stats -->
-                <div id="statsDeptView" class="hidden flex-col flex-1 space-y-3">
-                    <select id="statsDeptSelector" onchange="onDeptChange('statsDeptSelector')"
-                        class="mini-select w-full border-blue-200 bg-blue-50/50">
-                        <!-- Options populated by JS -->
-                    </select>
-                    <div class="space-y-2">
-                        <div id="dept-filter-card-not-started" onclick="toggleWorkStatusFilter('not_started')"
-                            class="filter-card bg-slate-50 px-3 py-2 rounded-lg border border-gray-100 flex flex-col"
-                            title="คลิกเพื่อดูเฉพาะงานที่ยังไม่ดำเนินการ">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-[10px] font-bold text-gray-500 uppercase">ยังไม่ดำเนินการ</span>
-                                <span class="text-xs font-black text-gray-700"><span
-                                        id="dept-status-not-started">0</span> งาน</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xs font-bold text-gray-400"><span id="dept-km-not-started"
-                                        class="text-gray-600">0.00</span> วงจร-กม.</span>
-                            </div>
-                        </div>
-
-                        <div id="dept-filter-card-surveying" onclick="toggleWorkStatusFilter('surveying')"
-                            class="filter-card bg-blue-50 px-3 py-2 rounded-lg border border-blue-100 flex flex-col"
-                            title="คลิกเพื่อดูเฉพาะงานสำรวจ/ประมาณการ">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-[10px] font-bold text-blue-500 uppercase">สำรวจ/ประมาณการ</span>
-                                <span class="text-xs font-black text-blue-600"><span id="dept-status-surveying">0</span>
-                                    งาน</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xs font-bold text-blue-300"><span id="dept-km-surveying"
-                                        class="text-blue-600">0.00</span> วงจร-กม.</span>
-                            </div>
-                        </div>
-
-                        <div id="dept-filter-card-approved" onclick="toggleWorkStatusFilter('approved')"
-                            class="filter-card bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-100 flex flex-col"
-                            title="คลิกเพื่อดูเฉพาะงานที่อนุมัติแล้ว">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-[10px] font-bold text-emerald-500 uppercase">อนุมัติแล้ว</span>
-                                <span class="text-xs font-black text-emerald-600"><span
-                                        id="dept-status-approved">0</span> งาน</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xs font-bold text-emerald-300"><span id="dept-km-approved"
-                                        class="text-emerald-600">0.00</span> วงจร-กม.</span>
-                            </div>
-                        </div>
-
-                        <div id="dept-filter-card-cancelled" onclick="toggleWorkStatusFilter('cancelled')"
-                            class="filter-card bg-rose-50 px-3 py-2 rounded-lg border border-rose-100 flex flex-col"
-                            title="คลิกเพื่อดูเฉพาะงานที่ยกเลิกงาน">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-[10px] font-bold text-rose-500 uppercase">ยกเลิกงาน</span>
-                                <span class="text-xs font-black text-rose-600"><span id="dept-status-cancelled">0</span>
-                                    งาน</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xs font-bold text-rose-300"><span id="dept-km-cancelled"
-                                        class="text-rose-600">0.00</span> วงจร-กม.</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="grid grid-cols-1 gap-2 overflow-y-auto max-h-[300px] custom-scrollbar" id="card4-content">
+                    <!-- Dynamic content will be injected here -->
                 </div>
             </div>
 
@@ -367,9 +296,10 @@
         <!-- Table Card -->
         <div class="glass-card overflow-hidden">
             <div class="p-4 border-b flex flex-col sm:flex-row justify-between items-center bg-white gap-3">
-                <h4 class="font-bold text-sm text-gray-700 flex items-center">
+                <h4 class="font-bold text-sm text-gray-700 flex items-center flex-wrap">
                     <i class="fas fa-table mr-2 text-purple-400"></i> รายละเอียดแผนงานก่อสร้างและปรับปรุงระบบจำหน่าย 22
-                    kV ตามโครงการต่างๆ
+                    kV ตามโครงการต่างๆ <span id="table-budget-title"
+                        class="text-purple-600 ml-1 text-xs bg-purple-50 px-2 py-0.5 rounded-full border border-purple-100 hidden"></span>
                 </h4>
                 <div class="flex items-center gap-3 w-full sm:w-auto">
                     <select id="deptFilter" onchange="onDeptChange('deptFilter')" class="mini-select shadow-sm">
@@ -389,16 +319,18 @@
                             <th class="p-4 font-bold text-purple-950 uppercase text-center w-20">ลำดับ</th>
                             <th class="p-4 font-bold text-purple-950 uppercase">กฟฟ.</th>
                             <th class="p-4 font-bold text-purple-950 uppercase">รายชื่องาน</th>
-                            <th class="p-4 font-bold text-purple-950 uppercase text-center">ปริมาณ<br>(วงจร-กม.)</th>
-                            <th class="p-4 font-bold text-purple-950 uppercase text-center">งบประมาณ<br>(บาท)</th>
-                            <th class="p-4 font-bold text-purple-950 uppercase text-center">สถานะการจัดสรร</th>
-                            <th class="p-4 font-bold text-purple-950 uppercase text-center">สถานะงาน</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase text-center">ประเภทงาน</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase text-center">ปริมาณงานตาม
+                                FS<br>(วงจร-กม.)</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase text-center">งบประมาณตาม FS<br>(บาท)</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase text-center">แผนการดำเนินงานจริง</th>
+                            <th class="p-4 font-bold text-purple-950 uppercase text-center">ปริมาณงานจริง<br>(วงจร-กม.)</th>
                             <th class="p-4 font-bold text-purple-950 uppercase text-center">รายละเอียด</th>
                         </tr>
                     </thead>
                     <tbody id="dataTableBody" class="divide-y divide-gray-50 text-gray-600">
                         <tr>
-                            <td colspan="8" class="p-20 text-center text-gray-400 italic">กำลังดึงข้อมูลโครงการจาก
+                            <td colspan="9" class="p-20 text-center text-gray-400 italic">กำลังดึงข้อมูลโครงการจาก
                                 Google Sheet...</td>
                         </tr>
                     </tbody>
@@ -445,9 +377,11 @@
         let deptStatsMap = {};
         let deptChartInstance = null;
         let activeWorkStatusFilter = 'all'; // ตัวแปรเก็บสถานะการกรองจากกล่องสถานะงาน
+        let activeAEFilter = 'all'; // ตัวแปรเก็บสถานะการกรองสถานะการดำเนินการตาม FS
+        let activeCard2Filter = false; // ตัวแปรควบคุมการกรองจากแผนงานหลัก (false) หรือแผนการดำเนินงานจริง (true)
 
         function fetchData() {
-            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}&range=A1:AC500&t=${Date.now()}`;
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}&range=A1:AH500&t=${Date.now()}`;
             const script = document.createElement('script');
             script.src = url;
             document.body.appendChild(script);
@@ -469,6 +403,7 @@
             allData = [];
             deptStatsMap = {};
             const uniqueDepts = new Set();
+            const uniqueBudgetSources = new Set();
             const deptCodeMap = {};
 
             rows.forEach((row, index) => {
@@ -492,37 +427,23 @@
                 const budgetSource = (getV(26) || '').toString().trim();
                 const statusAC = (getV(28) || '').toString().trim();
                 const workStatus = (getV(27) || '').toString().trim();
+                const kmAF = parseFloat(getV(31)) || 0;
+                const budgetAG = parseFloat(getV(32)) || 0;
+                const statusAE = (getV(30) || '').toString().trim();
+                const statusAH = (getV(33) || '').toString().trim();
 
                 const isHeader = title === 'ชื่อโครงการ' || title === 'โครงการ' || rawId === 'ลำดับ';
                 const isTotalRow = title.includes('ยอดรวม') || title.includes('รวมทั้งสิ้น');
                 const hasValue = (rawId !== null && !isNaN(parseFloat(rawId))) || title !== '';
+                const isFsWork = workStatus.includes('งานตาม FS');
 
                 if (!isHeader && !isTotalRow && hasValue) {
+                    if (budgetSource && budgetSource !== '-') {
+                        uniqueBudgetSources.add(budgetSource);
+                    }
                     if (dept !== '-') {
                         uniqueDepts.add(dept);
                         deptCodeMap[dept] = deptCode;
-                        if (!deptStatsMap[dept]) {
-                            deptStatsMap[dept] = {
-                                notStarted: 0, notStartedKm: 0,
-                                surveying: 0, surveyingKm: 0,
-                                approved: 0, approvedKm: 0,
-                                cancelled: 0, cancelledKm: 0
-                            };
-                        }
-
-                        if (workStatus.includes('ยกเลิก')) {
-                            deptStatsMap[dept].cancelled++;
-                            deptStatsMap[dept].cancelledKm += km;
-                        } else if (workStatus === 'ยังไม่ดำเนินการ' || workStatus === '' || workStatus === '-' || workStatus.includes('ยังไม่เริ่ม')) {
-                            deptStatsMap[dept].notStarted++;
-                            deptStatsMap[dept].notStartedKm += km;
-                        } else if (workStatus.includes('สำรวจ') || workStatus.includes('ประมาณการ')) {
-                            deptStatsMap[dept].surveying++;
-                            deptStatsMap[dept].surveyingKm += km;
-                        } else if (workStatus.includes('อนุมัติ')) {
-                            deptStatsMap[dept].approved++;
-                            deptStatsMap[dept].approvedKm += km;
-                        }
                     }
 
                     allData.push({
@@ -540,16 +461,41 @@
                         budget: budget,
                         budgetSource: budgetSource,
                         status: statusAC || 'ยังไม่ระบุ',
-                        workStatus: workStatus || 'ยังไม่ดำเนินการ'
+                        workStatus: workStatus,
+                        kmAF: kmAF,
+                        budgetAG: budgetAG,
+                        projectStatus: statusAH,
+                        statusAE: statusAE,
+                        isFsWork: isFsWork
                     });
                 }
             });
 
             const deptFilter = document.getElementById('deptFilter');
-            const statsDeptSelector = document.getElementById('statsDeptSelector');
+            const budgetFilterBox1 = document.getElementById('budgetFilterBox1');
+            const budgetFilterBox2 = document.getElementById('budgetFilterBox2');
+
+            // Store current selected budget filter if any
+            const currentBudgetFilter = budgetFilterBox1 ? budgetFilterBox1.value : 'all';
 
             deptFilter.innerHTML = '<option value="all">กฟฟ. ทั้งหมด</option>';
-            statsDeptSelector.innerHTML = '<option value="all">กฟฟ. ทั้งหมด</option>';
+            if (budgetFilterBox1) budgetFilterBox1.innerHTML = '<option value="all">รวมทุกงบ/โครงการ</option>';
+            if (budgetFilterBox2) budgetFilterBox2.innerHTML = '<option value="all">รวมทุกงบ/โครงการ</option>';
+
+            const sortedBudgetSources = Array.from(uniqueBudgetSources).sort();
+            sortedBudgetSources.forEach(source => {
+                const opt = document.createElement('option');
+                opt.value = source;
+                opt.innerText = source;
+                if (budgetFilterBox1) budgetFilterBox1.appendChild(opt.cloneNode(true));
+                if (budgetFilterBox2) budgetFilterBox2.appendChild(opt.cloneNode(true));
+            });
+
+            // Restore selection if it exists in the new options
+            if (budgetFilterBox1 && Array.from(budgetFilterBox1.options).some(opt => opt.value === currentBudgetFilter)) {
+                budgetFilterBox1.value = currentBudgetFilter;
+                if (budgetFilterBox2) budgetFilterBox2.value = currentBudgetFilter;
+            }
 
             const sortedDepts = Array.from(uniqueDepts).sort((a, b) => {
                 const codeA = parseInt(deptCodeMap[a]) || 0;
@@ -561,7 +507,6 @@
                 opt.value = dept;
                 opt.innerText = dept;
                 deptFilter.appendChild(opt.cloneNode(true));
-                statsDeptSelector.appendChild(opt.cloneNode(true));
             });
 
             filteredData = [...allData];
@@ -570,93 +515,63 @@
 
         function isBudgetMatch(data, filterVal) {
             if (filterVal === 'all') return true;
-            if (filterVal === 'คปอ.1' && data.budgetSource === 'คปอ.1') return true;
-            if (filterVal === '2569' && data.budgetSource === 'งบลงทุนปี 2569') return true;
-            if (filterVal === 'none' && data.budgetSource.includes('ยังไม่มีแผนงาน')) return true;
-            return false;
+            return data.budgetSource === filterVal;
         }
+
 
         // ฟังก์ชันตรวจสอบสถานะการทำงานสำหรับการกรอง
         function matchWorkStatus(ws, filterCategory) {
             if (filterCategory === 'all') return true;
             if (filterCategory === 'cancelled') return ws.includes('ยกเลิก');
             if (ws.includes('ยกเลิก')) return false;
-            if (filterCategory === 'not_started') return (ws === 'ยังไม่ดำเนินการ' || ws === '' || ws === '-' || ws.includes('ยังไม่เริ่ม'));
+            if (filterCategory === 'not_started') return (ws === 'ยังไม่ดำเนินการ' || ws.includes('ยังไม่เริ่ม'));
             if (filterCategory === 'surveying') return (ws.includes('สำรวจ') || ws.includes('ประมาณการ'));
             if (filterCategory === 'approved') return ws.includes('อนุมัติ');
             return false;
         }
 
-        // ฟังก์ชันเปิด/ปิดการกรองตามสถานะงาน
-        function toggleWorkStatusFilter(status) {
-            if (activeWorkStatusFilter === status) {
-                activeWorkStatusFilter = 'all'; // ยกเลิกการกรอง
-            } else {
-                activeWorkStatusFilter = status;
-            }
-            updateWorkStatusFilterUI();
-            updateChartData();
-            applyFilters();
-        }
-
-        // ฟังก์ชันอัปเดตความสวยงามของกล่องเมื่อถูกคลิก
-        function updateWorkStatusFilterUI() {
-            const ids = [
-                { id: 'filter-card-not-started', ring: 'ring-slate-400', match: 'not_started' },
-                { id: 'filter-card-surveying', ring: 'ring-blue-400', match: 'surveying' },
-                { id: 'filter-card-approved', ring: 'ring-emerald-400', match: 'approved' },
-                { id: 'filter-card-cancelled', ring: 'ring-rose-400', match: 'cancelled' },
-                { id: 'dept-filter-card-not-started', ring: 'ring-slate-400', match: 'not_started' },
-                { id: 'dept-filter-card-surveying', ring: 'ring-blue-400', match: 'surveying' },
-                { id: 'dept-filter-card-approved', ring: 'ring-emerald-400', match: 'approved' },
-                { id: 'dept-filter-card-cancelled', ring: 'ring-rose-400', match: 'cancelled' }
-            ];
-
-            ids.forEach(item => {
-                const el = document.getElementById(item.id);
-                if (el) {
-                    el.classList.remove('ring-2', item.ring, 'shadow-md', 'scale-[1.02]');
-                    if (activeWorkStatusFilter === item.match) {
-                        el.classList.add('ring-2', item.ring, 'shadow-md', 'scale-[1.02]');
-                    }
-                }
-            });
-        }
-
         function onDeptChange(sourceId) {
             const val = document.getElementById(sourceId).value;
-            document.getElementById('statsDeptSelector').value = val;
             document.getElementById('deptFilter').value = val;
-
-            updateDeptStatsView();
             updateChartData();
             applyFilters();
         }
+
+        function onBudgetFilterChange(changedSelectId) {
+            const val = document.getElementById(changedSelectId).value;
+            const select1 = document.getElementById('budgetFilterBox1');
+            const select2 = document.getElementById('budgetFilterBox2');
+            if (select1) select1.value = val;
+            if (select2) select2.value = val;
+            updateDashboard();
+        }
+
+
 
         function updateBox1Stats() {
             const filterVal = document.getElementById('budgetFilterBox1').value;
             let count = 0, km = 0, budget = 0;
+            let countNew = 0, kmNew = 0, budgetNew = 0;
 
-            let nCnt = 0, nKm = 0;
-            let sCnt = 0, sKm = 0;
-            let aCnt = 0, aKm = 0;
-            let cCnt = 0, cKm = 0;
 
             allData.forEach(d => {
                 if (isBudgetMatch(d, filterVal)) {
-                    // สำหรับกล่องที่ 1
-                    count++; km += d.km; budget += d.budget;
+                    // สำหรับกล่องที่ 1 (กรองเฉพาะ 'งานตาม FS')
+                    if (d.isFsWork) {
+                        if (d.km > 0) {
+                            count++;
+                        }
+                        km += d.km;
+                        budget += d.budget;
+                    }
 
-                    // สำหรับกล่องที่ 4 (ภาพรวม) ให้คำนวณตามงบที่เลือก
-                    const ws = d.workStatus;
-                    if (ws.includes('ยกเลิก')) {
-                        cCnt++; cKm += d.km;
-                    } else if (ws === 'ยังไม่ดำเนินการ' || ws === '' || ws === '-' || ws.includes('ยังไม่เริ่ม')) {
-                        nCnt++; nKm += d.km;
-                    } else if (ws.includes('สำรวจ') || ws.includes('ประมาณการ')) {
-                        sCnt++; sKm += d.km;
-                    } else if (ws.includes('อนุมัติ')) {
-                        aCnt++; aKm += d.km;
+                    // สำหรับกล่องที่เพิ่มใหม่ (AF/AG) (ไม่จำเป็นต้องเป็น 'งานตาม FS')
+                    if (d.status === 'ดำเนินการตาม FS' ||
+                        d.status === 'ดำเนินการงานย่อยตาม FS' ||
+                        d.status === 'ดำเนินการงานทดแทน FS') {
+                        countNew++;
+                        kmNew += d.kmAF;
+                        budgetNew += d.budgetAG;
                     }
                 }
             });
@@ -666,147 +581,319 @@
             document.getElementById('total-km').innerText = km.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             document.getElementById('total-budget').innerText = budget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            // อัปเดตข้อมูลกล่องที่ 4 (ภาพรวม) ให้ตรงกับ Filter ในกล่องที่ 1
-            document.getElementById('status-not-started-count').innerText = nCnt.toLocaleString() + ' งาน';
-            document.getElementById('status-not-started-km').innerText = nKm.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-            document.getElementById('status-surveying-count').innerText = sCnt.toLocaleString() + ' งาน';
-            document.getElementById('status-surveying-km').innerText = sKm.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-            document.getElementById('status-approved-count').innerText = aCnt.toLocaleString() + ' งาน';
-            document.getElementById('status-approved-km').innerText = aKm.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-            document.getElementById('status-cancelled-count').innerText = cCnt.toLocaleString() + ' งาน';
-            document.getElementById('status-cancelled-km').innerText = cKm.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-            // อัปเดตวิวราย กฟฟ. ด้วย เผื่อผู้ใช้อยู่ในโหมดนั้น
-            updateDeptStatsView();
+            // อัปเดตข้อมูลกล่องที่เพิ่มใหม่
+            document.getElementById('total-count-new').innerText = countNew.toLocaleString();
+            document.getElementById('total-km-new').innerText = kmNew.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('total-budget-new').innerText = budgetNew.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
         function updateBox2Stats() {
             const filterVal = document.getElementById('budgetFilterBox1').value;
-            let count = 0, km = 0, budget = 0;
+
+            let countAllocated = 0, kmAllocated = 0, budgetAllocated = 0;
+            let countInProgress = 0, kmInProgress = 0, budgetInProgress = 0;
+            let countPending = 0, kmPending = 0, budgetPending = 0;
+            let countCancelled = 0, kmCancelled = 0, budgetCancelled = 0;
+            let countSubTask = 0, kmSubTask = 0, budgetSubTask = 0;
+
             allData.forEach(d => {
-                if (d.status === 'จัดสรรเข้าโครงการแล้ว' && isBudgetMatch(d, filterVal)) {
-                    count++; km += d.km; budget += d.budget;
+                let matchesCardScope = false;
+                if (activeCard2Filter) {
+                    matchesCardScope = (d.status === 'ดำเนินการตาม FS' ||
+                        d.status === 'ดำเนินการงานย่อยตาม FS' ||
+                        d.status === 'ดำเนินการงานทดแทน FS');
+                } else {
+                    matchesCardScope = d.isFsWork;
                 }
-            });
-            document.getElementById('count-allocated').innerText = count.toLocaleString();
-            document.getElementById('allocated-km').innerText = km.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            document.getElementById('allocated-budget-box').innerText = budget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
 
-        function updateBox3Stats() {
-            const filterVal = document.getElementById('budgetFilterBox1').value;
-            let count = 0, km = 0, budget = 0;
-            allData.forEach(d => {
-                if (d.status === 'ยังไม่ได้จัดสรรเข้าโครงการ' && isBudgetMatch(d, filterVal)) {
-                    count++; km += d.km; budget += d.budget;
-                }
-            });
-            document.getElementById('count-pending').innerText = count.toLocaleString();
-            document.getElementById('pending-km').innerText = km.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            document.getElementById('pending-budget-box').innerText = budget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        function setStatsView(view) {
-            const genBtn = document.getElementById('toggleGeneral');
-            const deptBtn = document.getElementById('toggleDept');
-            const genView = document.getElementById('statsGeneralView');
-            const deptView = document.getElementById('statsDeptView');
-
-            if (view === 'general') {
-                genBtn.classList.replace('toggle-inactive', 'toggle-active');
-                deptBtn.classList.replace('toggle-active', 'toggle-inactive');
-                genView.classList.replace('hidden', 'flex');
-                deptView.classList.replace('flex', 'hidden');
-
-                document.getElementById('statsDeptSelector').value = 'all';
-                document.getElementById('deptFilter').value = 'all';
-
-                updateDeptStatsView();
-                updateChartData();
-                applyFilters();
-            } else {
-                deptBtn.classList.replace('toggle-inactive', 'toggle-active');
-                genBtn.classList.replace('toggle-active', 'toggle-inactive');
-                deptView.classList.replace('hidden', 'flex');
-                genView.classList.replace('flex', 'hidden');
-                updateDeptStatsView();
-            }
-        }
-
-        function updateDeptStatsView() {
-            const selectedDept = document.getElementById('statsDeptSelector').value;
-            const filterVal = document.getElementById('budgetFilterBox1').value;
-
-            let nCnt = 0, nKm = 0;
-            let sCnt = 0, sKm = 0;
-            let aCnt = 0, aKm = 0;
-            let cCnt = 0, cKm = 0;
-
-            allData.forEach(d => {
-                const matchesDept = (selectedDept === 'all' || d.dept === selectedDept);
-                if (matchesDept && isBudgetMatch(d, filterVal)) {
-                    const ws = d.workStatus;
-                    const km = d.km;
-                    if (ws.includes('ยกเลิก')) {
-                        cCnt++; cKm += km;
-                    } else if (ws === 'ยังไม่ดำเนินการ' || ws === '' || ws === '-' || ws.includes('ยังไม่เริ่ม')) {
-                        nCnt++; nKm += km;
-                    } else if (ws.includes('สำรวจ') || ws.includes('ประมาณการ')) {
-                        sCnt++; sKm += km;
-                    } else if (ws.includes('อนุมัติ')) {
-                        aCnt++; aKm += km;
+                if (isBudgetMatch(d, filterVal) && matchesCardScope) {
+                    // จัดสรรเข้าโครงการแล้ว
+                    if (d.projectStatus.includes('จัดสรรเข้าโครงการแล้ว') || d.projectStatus.includes('จัดสรรงานเข้าโครงการแล้ว')) {
+                        countAllocated++;
+                        kmAllocated += d.kmAF;
+                        budgetAllocated += d.budgetAG;
+                    }
+                    // อยู่ระหว่างจัดสรรเข้าโครงการ
+                    else if (d.projectStatus.includes('อยู่ระหว่างจัดสรรเข้าโครงการ')) {
+                        countInProgress++;
+                        kmInProgress += d.kmAF;
+                        budgetInProgress += d.budgetAG;
+                    }
+                    // ยกเลิกงาน
+                    else if (d.projectStatus.includes('ยกเลิกงาน') || d.projectStatus.includes('ยกเลิก')) {
+                        countCancelled++;
+                        kmCancelled += d.km;
+                        budgetCancelled += d.budget;
+                    }
+                    // เปลี่ยนไปดำเนินการในงานย่อย
+                    else if (d.projectStatus.includes('เปลี่ยนไปดำเนินการในงานย่อย')) {
+                        countSubTask++;
+                        kmSubTask += d.km;
+                        budgetSubTask += d.budget;
+                    }
+                    // ยังไม่ได้จัดสรรเข้าโครงการ
+                    else if (d.projectStatus.includes('ยังไม่ได้จัดสรรเข้าโครงการ') || d.projectStatus.includes('ยังไม่ได้จัดสรรงานเข้าโครงการ')) {
+                        countPending++;
+                        kmPending += d.km;
+                        budgetPending += d.budget;
                     }
                 }
             });
 
-            document.getElementById('dept-status-not-started').innerText = nCnt.toLocaleString() + ' งาน';
-            document.getElementById('dept-km-not-started').innerText = nKm.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            // Update UI for Row 1
+            document.getElementById('count-allocated').innerText = countAllocated.toLocaleString();
+            document.getElementById('allocated-km').innerText = kmAllocated.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('allocated-budget-box').innerText = budgetAllocated.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            document.getElementById('dept-status-surveying').innerText = sCnt.toLocaleString() + ' งาน';
-            document.getElementById('dept-km-surveying').innerText = sKm.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            // Update UI for Row 2
+            document.getElementById('count-in-progress').innerText = countInProgress.toLocaleString();
+            document.getElementById('in-progress-km').innerText = kmInProgress.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('in-progress-budget-box').innerText = budgetInProgress.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            document.getElementById('dept-status-approved').innerText = aCnt.toLocaleString() + ' งาน';
-            document.getElementById('dept-km-approved').innerText = aKm.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            // Update UI for Row 3
+            document.getElementById('count-pending').innerText = countPending.toLocaleString();
+            document.getElementById('pending-km').innerText = kmPending.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('pending-budget-box').innerText = budgetPending.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            document.getElementById('dept-status-cancelled').innerText = cCnt.toLocaleString() + ' งาน';
-            document.getElementById('dept-km-cancelled').innerText = cKm.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            // Update UI for Row 4: ยกเลิกงาน
+            document.getElementById('count-cancelled').innerText = countCancelled.toLocaleString();
+            document.getElementById('cancelled-km').innerText = kmCancelled.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('cancelled-budget-box').innerText = budgetCancelled.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            // Update UI for Row 5: เปลี่ยนไปดำเนินการในงานย่อย
+            document.getElementById('count-subtask').innerText = countSubTask.toLocaleString();
+            document.getElementById('subtask-km').innerText = kmSubTask.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('subtask-budget-box').innerText = budgetSubTask.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function updateBox4Stats() {
+            const filterVal = document.getElementById('budgetFilterBox1').value;
+            const grouped = {};
+
+            // 1. Collect all unique statusAE values under the current card scope to keep rows visible
+            allData.forEach(d => {
+                let matchesCardScope = false;
+                if (activeCard2Filter) {
+                    matchesCardScope = (d.status === 'ดำเนินการตาม FS' ||
+                        d.status === 'ดำเนินการงานย่อยตาม FS' ||
+                        d.status === 'ดำเนินการงานทดแทน FS');
+                } else {
+                    matchesCardScope = d.isFsWork;
+                }
+
+                if (matchesCardScope && d.statusAE && d.statusAE !== '-' && d.statusAE !== '') {
+                    grouped[d.statusAE] = { count: 0, km: 0 };
+                }
+            });
+
+            // 2. Accumulate counts and km for matched items
+            allData.forEach(d => {
+                let matchesCardScope = false;
+                if (activeCard2Filter) {
+                    matchesCardScope = (d.status === 'ดำเนินการตาม FS' ||
+                        d.status === 'ดำเนินการงานย่อยตาม FS' ||
+                        d.status === 'ดำเนินการงานทดแทน FS');
+                } else {
+                    matchesCardScope = d.isFsWork;
+                }
+
+                if (isBudgetMatch(d, filterVal) && matchesCardScope) {
+                    if (d.statusAE && d.statusAE !== '-' && d.statusAE !== '') {
+                        if (!grouped[d.statusAE]) {
+                            grouped[d.statusAE] = { count: 0, km: 0 };
+                        }
+                        grouped[d.statusAE].count++;
+                        grouped[d.statusAE].km += d.km;
+                    }
+                }
+            });
+
+            const contentDiv = document.getElementById('card4-content');
+            contentDiv.innerHTML = '';
+
+            const keys = Object.keys(grouped).sort();
+
+            if (keys.length === 0) {
+                contentDiv.innerHTML = '<div class="text-xs text-gray-400 p-2">ไม่มีข้อมูล</div>';
+                return;
+            }
+
+            keys.forEach(key => {
+                const stat = grouped[key];
+                const isSelected = activeAEFilter === key;
+
+                // กำหนดสีตามข้อความสถานะ (คล้ายกับการ์ดที่ 3)
+                let bgClass = 'bg-blue-50';
+                let borderClass = 'border-blue-100';
+                let textClass = 'text-blue-800';
+                let subtextClass = 'text-blue-600';
+
+                if (key.includes('เปลี่ยนไปดำเนินการในงานย่อย')) {
+                    bgClass = 'bg-amber-50';
+                    borderClass = 'border-amber-100';
+                    textClass = 'text-amber-800';
+                    subtextClass = 'text-amber-600';
+                } else if (key.includes('ยังไม่ดำเนินการ') || key.includes('ยังไม่เริ่ม')) {
+                    bgClass = 'bg-gray-100';
+                    borderClass = 'border-gray-200';
+                    textClass = 'text-gray-800';
+                    subtextClass = 'text-gray-600';
+                } else if (key.includes('จัดสรรเข้าโครงการแล้ว') || key.includes('แล้วเสร็จ') || key.includes('อนุมัติ')) {
+                    bgClass = 'bg-emerald-50';
+                    borderClass = 'border-emerald-100';
+                    textClass = 'text-emerald-800';
+                    subtextClass = 'text-emerald-600';
+                } else if (key.includes('อยู่ระหว่าง') || key.includes('ดำเนิน')) {
+                    bgClass = 'bg-amber-50';
+                    borderClass = 'border-amber-100';
+                    textClass = 'text-amber-800';
+                    subtextClass = 'text-amber-600';
+                } else if (key.includes('ยังไม่ได้') || key.includes('ไม่') || key.includes('ยกเลิก')) {
+                    bgClass = 'bg-rose-50';
+                    borderClass = 'border-rose-100';
+                    textClass = 'text-rose-800';
+                    subtextClass = 'text-rose-600';
+                }
+
+                let selectionClass = isSelected
+                    ? 'ring-2 ring-blue-500 shadow-md border-transparent font-bold'
+                    : 'hover:shadow-sm opacity-80 hover:opacity-100';
+
+                const html = `
+                     <div onclick="toggleAEFilter('${key}')" 
+                          class="flex justify-between items-center p-2.5 ${bgClass} rounded-lg border ${borderClass} cursor-pointer transition-all duration-200 ${selectionClass}">
+                         <div>
+                             <h4 class="font-bold ${textClass} text-xs flex items-center gap-1.5">
+                                 ${key}
+                                 ${isSelected ? '<i class="fas fa-check-circle text-blue-500 text-[10px]"></i>' : ''}
+                             </h4>
+                             <p class="text-[10px] ${subtextClass} mt-0.5">ปริมาณงาน (H): <span class="font-bold">${stat.km.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> กม.</p>
+                         </div>
+                         <div class="text-lg font-black ${subtextClass}">${stat.count.toLocaleString()}</div>
+                     </div>
+                `;
+                contentDiv.innerHTML += html;
+            });
+        }
+
+        function toggleAEFilter(status) {
+            if (activeAEFilter === status) {
+                activeAEFilter = 'all';
+            } else {
+                activeAEFilter = status;
+            }
+            updateBox4Stats();
+            updateChartData();
+            applyFilters();
+        }
+
+        function setCard2Filter(value) {
+            activeCard2Filter = value;
+            // Clear other sub-filters when toggling card scope
+            activeWorkStatusFilter = 'all';
+            activeAEFilter = 'all';
+
+            updateCardSelectionStyles();
+            updateBox2Stats();
+            updateBox4Stats();
+            updateChartData();
+            applyFilters();
+        }
+
+        function updateCardSelectionStyles() {
+            const card1 = document.getElementById('card1-container');
+            const card2 = document.getElementById('card2-container-box');
+            if (!card1 || !card2) return;
+
+            if (activeCard2Filter) {
+                // Card 2 active (แผนการดำเนินงานจริง)
+                card2.classList.add('ring-2', 'ring-purple-500', 'shadow-md');
+                card2.classList.remove('opacity-60');
+                card1.classList.remove('ring-2', 'ring-indigo-500', 'shadow-md');
+                card1.classList.add('opacity-60');
+            } else {
+                // Card 1 active (แผนงานตาม FS)
+                card1.classList.add('ring-2', 'ring-indigo-500', 'shadow-md');
+                card1.classList.remove('opacity-60');
+                card2.classList.remove('ring-2', 'ring-purple-500', 'shadow-md');
+                card2.classList.add('opacity-60');
+            }
         }
 
         function updateDashboard() {
             updateBox1Stats();
             updateBox2Stats();
-            updateBox3Stats();
-
+            updateBox4Stats();
             updateChartData();
+            updateCardSelectionStyles();
             applyFilters();
+        }
+
+        function getAEColor(status) {
+            if (status.includes('เปลี่ยนไปดำเนินการในงานย่อย')) {
+                return '#fbbf24'; // Warm yellow
+            }
+            if (status.includes('ยังไม่ดำเนินการ') || status.includes('ยังไม่เริ่ม')) {
+                return '#9ca3af'; // Gray (Neutral gray)
+            }
+            if (status.includes('จัดสรรเข้าโครงการแล้ว') || status.includes('แล้วเสร็จ') || status.includes('อนุมัติ')) {
+                return '#10b981'; // Emerald (Green)
+            }
+            if (status.includes('อยู่ระหว่าง') || status.includes('ดำเนิน')) {
+                return '#f59e0b'; // Amber (Orange)
+            }
+            if (status.includes('ยังไม่ได้') || status.includes('ไม่') || status.includes('ยกเลิก')) {
+                return '#ef4444'; // Red/Rose
+            }
+            return '#3b82f6'; // Blue (Default)
         }
 
         function updateChartData() {
             const filterVal = document.getElementById('budgetFilterBox1').value;
             const selectedDept = document.getElementById('deptFilter').value;
+
+            // หาชุดข้อมูลสถานะ AE ที่เป็นไปได้ทั้งหมด
+            const uniqueAEStatuses = new Set();
+            allData.forEach(d => {
+                if (d.statusAE && d.statusAE !== '-' && d.statusAE !== '') {
+                    if (activeAEFilter === 'all' || d.statusAE === activeAEFilter) {
+                        if (activeCard2Filter) {
+                            const isCard2Item = (d.status === 'ดำเนินการตาม FS' ||
+                                d.status === 'ดำเนินการงานย่อยตาม FS' ||
+                                d.status === 'ดำเนินการงานทดแทน FS');
+                            if (isCard2Item) uniqueAEStatuses.add(d.statusAE);
+                        } else {
+                            uniqueAEStatuses.add(d.statusAE);
+                        }
+                    }
+                }
+            });
+            const statusList = Array.from(uniqueAEStatuses).sort();
+
             const deptStats = {};
 
             allData.forEach(d => {
                 const matchesDept = (selectedDept === 'all' || d.dept === selectedDept);
-                // กรองข้อมูลตามงบประมาณ และสถานะที่ถูกกดเลือกใน UI รวมถึงกฟฟที่เลือก
-                if (d.dept && d.dept !== '-' && isBudgetMatch(d, filterVal) && matchWorkStatus(d.workStatus, activeWorkStatusFilter) && matchesDept) {
-                    if (!deptStats[d.dept]) {
-                        deptStats[d.dept] = { total: 0, notStarted: 0, surveying: 0, approved: 0, cancelled: 0, code: d.deptCode };
-                    }
-                    deptStats[d.dept].total++;
+                const matchesAE = (activeAEFilter === 'all' || d.statusAE === activeAEFilter);
 
-                    const ws = d.workStatus;
-                    if (ws.includes('ยกเลิก')) {
-                        deptStats[d.dept].cancelled++;
-                    } else if (ws === 'ยังไม่ดำเนินการ' || ws === '' || ws === '-' || ws.includes('ยังไม่เริ่ม')) {
-                        deptStats[d.dept].notStarted++;
-                    } else if (ws.includes('สำรวจ') || ws.includes('ประมาณการ')) {
-                        deptStats[d.dept].surveying++;
-                    } else if (ws.includes('อนุมัติ')) {
-                        deptStats[d.dept].approved++;
+                let matchesCardScope = false;
+                if (activeCard2Filter) {
+                    matchesCardScope = (d.status === 'ดำเนินการตาม FS' ||
+                        d.status === 'ดำเนินการงานย่อยตาม FS' ||
+                        d.status === 'ดำเนินการงานทดแทน FS');
+                } else {
+                    matchesCardScope = d.isFsWork && matchWorkStatus(d.workStatus, activeWorkStatusFilter) && matchesAE;
+                }
+
+                if (d.dept && d.dept !== '-' && isBudgetMatch(d, filterVal) && matchesDept && matchesCardScope) {
+                    if (!deptStats[d.dept]) {
+                        deptStats[d.dept] = { code: d.deptCode };
+                        statusList.forEach(s => {
+                            deptStats[d.dept][s] = 0;
+                        });
+                    }
+                    if (d.statusAE && d.statusAE !== '-' && d.statusAE !== '') {
+                        deptStats[d.dept][d.statusAE] = (deptStats[d.dept][d.statusAE] || 0) + 1;
                     }
                 }
             });
@@ -818,138 +905,109 @@
             });
             const labels = sortedDepts.map(item => item[0]);
 
-            const dataNotStarted = sortedDepts.map(item => item[1].notStarted);
-            const dataSurveying = sortedDepts.map(item => item[1].surveying);
-            const dataApproved = sortedDepts.map(item => item[1].approved);
-            const dataCancelled = sortedDepts.map(item => item[1].cancelled);
+            // สร้าง Datasets แบบไดนามิกตามสถานะจริงของ AE
+            const datasets = statusList.map(status => {
+                const data = sortedDepts.map(item => item[1][status] || 0);
+                return {
+                    label: status,
+                    data: data,
+                    backgroundColor: getAEColor(status),
+                    maxBarThickness: 40
+                };
+            });
 
             const ctx = document.getElementById('deptJobChart').getContext('2d');
 
             if (deptChartInstance) {
-                deptChartInstance.data.labels = labels;
-                deptChartInstance.data.datasets[0].data = dataNotStarted;
-                deptChartInstance.data.datasets[1].data = dataSurveying;
-                deptChartInstance.data.datasets[2].data = dataApproved;
-                deptChartInstance.data.datasets[3].data = dataCancelled;
-                deptChartInstance.update();
-            } else {
-                deptChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    plugins: [ChartDataLabels], // เปิดใช้งาน Plugin
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            {
-                                label: 'ยังไม่ดำเนินการ',
-                                data: dataNotStarted,
-                                backgroundColor: '#9ca3af', // สีเทา
-                                maxBarThickness: 40
-                            },
-                            {
-                                label: 'สำรวจ/ประมาณการ',
-                                data: dataSurveying,
-                                backgroundColor: '#60a5fa', // สีฟ้า
-                                maxBarThickness: 40
-                            },
-                            {
-                                label: 'อนุมัติแล้ว',
-                                data: dataApproved,
-                                backgroundColor: '#34d399', // สีเขียว
-                                maxBarThickness: 40
-                            },
-                            {
-                                label: 'ยกเลิกงาน',
-                                data: dataCancelled,
-                                backgroundColor: '#f87171', // สีแดง
-                                maxBarThickness: 40
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        onClick: (event, elements) => {
-                            if (elements && elements.length > 0) {
-                                const index = elements[0].index;
-                                const label = deptChartInstance.data.labels[index];
-                                if (label) {
-                                    const currentDept = document.getElementById('deptFilter').value;
-                                    // Toggle: if clicked on the already selected dept, reset to 'all'
-                                    const nextDept = (currentDept === label) ? 'all' : label;
+                deptChartInstance.destroy();
+            }
 
-                                    if (nextDept === 'all') {
-                                        setStatsView('general');
-                                    } else {
-                                        document.getElementById('deptFilter').value = nextDept;
-                                        document.getElementById('statsDeptSelector').value = nextDept;
-                                        setStatsView('dept');
-                                        onDeptChange('deptFilter');
-                                    }
-                                }
-                            }
-                        },
-                        onHover: (event, chartElement) => {
-                            const canvas = document.getElementById('deptJobChart');
-                            if (canvas) {
-                                canvas.style.cursor = chartElement.length ? 'pointer' : 'default';
-                            }
-                        },
-                        plugins: {
-                            // ตั้งค่า DataLabels ให้แสดงตัวเลขบนกราฟ
-                            datalabels: {
-                                color: '#ffffff', // สีตัวอักษร
-                                font: {
-                                    family: 'Sarabun',
-                                    weight: 'bold',
-                                    size: 11
-                                },
-                                formatter: function (value, context) {
-                                    return value > 0 ? value : ''; // แสดงเฉพาะค่าที่มากกว่า 0 เพื่อไม่ให้กราฟรก
-                                },
-                                align: 'center',
-                                anchor: 'center'
-                            },
-                            legend: {
-                                display: true,
-                                position: 'top',
-                                labels: { font: { family: 'Sarabun', size: 11 }, usePointStyle: true }
-                            },
-                            tooltip: {
-                                titleFont: { family: 'Sarabun' },
-                                bodyFont: { family: 'Sarabun' },
-                                mode: 'index',
-                                intersect: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                stacked: true,
-                                beginAtZero: true,
-                                ticks: { stepSize: 1, font: { family: 'Sarabun', size: 10 } },
-                                grid: { color: '#f1f5f9' }
-                            },
-                            x: {
-                                stacked: true,
-                                ticks: { font: { family: 'Sarabun', size: 11 }, maxRotation: 45, minRotation: 45 },
-                                grid: { display: false }
+            deptChartInstance = new Chart(ctx, {
+                type: 'bar',
+                plugins: [ChartDataLabels], // เปิดใช้งาน Plugin
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (event, elements) => {
+                        if (elements && elements.length > 0) {
+                            const index = elements[0].index;
+                            const label = deptChartInstance.data.labels[index];
+                            if (label) {
+                                const currentDept = document.getElementById('deptFilter').value;
+                                // Toggle: if clicked on the already selected dept, reset to 'all'
+                                const nextDept = (currentDept === label) ? 'all' : label;
+
+                                document.getElementById('deptFilter').value = nextDept;
+                                onDeptChange('deptFilter');
                             }
                         }
+                    },
+                    onHover: (event, chartElement) => {
+                        const canvas = document.getElementById('deptJobChart');
+                        if (canvas) {
+                            canvas.style.cursor = chartElement.length ? 'pointer' : 'default';
+                        }
+                    },
+                    plugins: {
+                        // ตั้งค่า DataLabels ให้แสดงตัวเลขบนกราฟ
+                        datalabels: {
+                            color: '#ffffff', // สีตัวอักษร
+                            font: {
+                                family: 'Sarabun',
+                                weight: 'bold',
+                                size: 11
+                            },
+                            formatter: function (value, context) {
+                                return value > 0 ? value : ''; // แสดงเฉพาะค่าที่มากกว่า 0 เพื่อไม่ให้กราฟรก
+                            },
+                            align: 'center',
+                            anchor: 'center'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: { font: { family: 'Sarabun', size: 11 }, usePointStyle: true }
+                        },
+                        tooltip: {
+                            titleFont: { family: 'Sarabun' },
+                            bodyFont: { family: 'Sarabun' },
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            ticks: { stepSize: 1, font: { family: 'Sarabun', size: 10 } },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: {
+                            stacked: true,
+                            ticks: { font: { family: 'Sarabun', size: 11 }, maxRotation: 45, minRotation: 45 },
+                            grid: { display: false }
+                        }
                     }
-                });
-            }
+                }
+            });
         }
+
 
         function renderTable() {
             const tbody = document.getElementById('dataTableBody');
             if (filteredData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="p-20 text-center text-gray-400 italic">ไม่พบข้อมูลที่ค้นหา</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" class="p-20 text-center text-gray-400 italic">ไม่พบข้อมูลที่ค้นหา</td></tr>';
                 return;
             }
 
             tbody.innerHTML = filteredData.map(d => {
                 const isDone = d.status === 'จัดสรรเข้าโครงการแล้ว';
                 const isPending = d.status === 'ยังไม่ได้จัดสรรเข้าโครงการ';
-                let badgeClass = isDone ? 'bg-allocated' : (isPending ? 'bg-pending' : 'bg-gray-100 text-gray-500');
+                let badgeClass = isDone ? 'bg-allocated' : (isPending ? 'bg-pending' : 'bg-gray-100 text-black');
 
                 let workStatusColor = 'text-gray-600';
                 if (d.workStatus.includes('ยกเลิก')) workStatusColor = 'text-rose-600 font-bold';
@@ -962,14 +1020,15 @@
                         <td class="p-4 text-center font-bold text-purple-900 bg-purple-50/20 w-20">${d.id}</td>
                         <td class="p-4 font-bold text-gray-700">${d.dept}</td>
                         <td class="p-4 text-black">${d.title}</td>
+                        <td class="p-4 text-center text-xs text-black">
+                            ${d.workStatus}
+                        </td>
                         <td class="p-4 text-center font-black text-indigo-600">${d.km.toFixed(2)}</td>
                         <td class="p-4 text-center font-black text-gray-800">${d.budget.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                         <td class="p-4 text-center">
                             <span class="status-badge ${badgeClass}">${d.status}</span>
                         </td>
-                        <td class="p-4 text-center text-xs ${workStatusColor}">
-                            ${d.workStatus}
-                        </td>
+                        <td class="p-4 text-center font-black text-purple-600">${d.kmAF.toFixed(2)}</td>
                         <td class="p-4 text-center">
                             <button onclick="openDetailModal('${d.id}')" class="bg-indigo-100 text-indigo-700 hover:bg-indigo-600 hover:text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-colors shadow-sm">
                                 <i class="fas fa-search mr-1"></i> ดูรายละเอียด
@@ -983,15 +1042,34 @@
         function applyFilters() {
             const q = document.getElementById('searchInput').value.toLowerCase();
             const dept = document.getElementById('deptFilter').value;
-            const filterVal = document.getElementById('budgetFilterBox1').value;
+            const filterBox = document.getElementById('budgetFilterBox1');
+            const filterVal = filterBox.value;
+            const filterText = filterBox.options[filterBox.selectedIndex].text;
+
+            const titleSpan = document.getElementById('table-budget-title');
+            if (filterVal !== 'all' && titleSpan) {
+                titleSpan.innerText = filterText;
+                titleSpan.classList.remove('hidden');
+            } else if (titleSpan) {
+                titleSpan.classList.add('hidden');
+            }
 
             filteredData = allData.filter(d => {
                 const matchesSearch = d.title.toLowerCase().includes(q) || d.dept.toLowerCase().includes(q) || d.id.toString().includes(q);
                 const matchesDept = (dept === 'all' || d.dept === dept);
                 const matchesBudget = isBudgetMatch(d, filterVal);
-                const matchesStatus = matchWorkStatus(d.workStatus, activeWorkStatusFilter); // กรองตามสถานะที่ถูกกดในกล่องที่ 4
 
-                return matchesSearch && matchesDept && matchesBudget && matchesStatus;
+                if (activeCard2Filter) {
+                    const matchesCard2Status = (d.status === 'ดำเนินการตาม FS' ||
+                        d.status === 'ดำเนินการงานย่อยตาม FS' ||
+                        d.status === 'ดำเนินการงานทดแทน FS');
+                    return matchesSearch && matchesDept && matchesBudget && matchesCard2Status;
+                } else {
+                    const matchesStatus = matchWorkStatus(d.workStatus, activeWorkStatusFilter);
+                    const matchesAE = (activeAEFilter === 'all' || d.statusAE === activeAEFilter);
+                    const matchesFs = d.isFsWork;
+                    return matchesSearch && matchesDept && matchesBudget && matchesStatus && matchesAE && matchesFs;
+                }
             });
             renderTable();
         }
@@ -1081,12 +1159,21 @@
                     </div>
 
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">ปริมาณงาน</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">ปริมาณงานตาม FS</p>
                         <p class="text-lg font-black text-indigo-600">${project.km.toFixed(2)} <span class="text-xs text-gray-500 font-normal">วงจร-กม.</span></p>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">งบประมาณ</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">ปริมาณงานจริง (AF)</p>
+                        <p class="text-lg font-black text-purple-600">${project.kmAF.toFixed(2)} <span class="text-xs text-gray-500 font-normal">วงจร-กม.</span></p>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">งบประมาณตาม FS</p>
                         <p class="text-lg font-black text-emerald-600">${project.budget.toLocaleString(undefined, { minimumFractionDigits: 2 })} <span class="text-xs text-gray-500 font-normal">บาท</span></p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">งบประมาณจริง (AG)</p>
+                        <p class="text-lg font-black text-teal-600">${project.budgetAG.toLocaleString(undefined, { minimumFractionDigits: 2 })} <span class="text-xs text-gray-500 font-normal">บาท</span></p>
                     </div>
 
                     <div class="md:col-span-2 bg-purple-50 p-4 rounded-xl border border-purple-100">
@@ -1095,16 +1182,20 @@
                     </div>
 
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">สถานะการจัดสรร (AC)</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">แผนการดำเนินงานจริง (AC)</p>
                         <div class="mt-1"><span class="status-badge ${badgeClass} px-3 py-1.5 text-xs">${project.status}</span></div>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">สถานะจัดงานเข้าโครงการ (AH)</p>
+                        <p class="text-sm font-bold text-blue-600 mt-1">${project.projectStatus || '-'}</p>
+                    </div>
+                    <div class="md:col-span-2 bg-gray-50 p-4 rounded-xl border border-gray-100">
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">แหล่งงบประมาณ</p>
                         <p class="text-sm font-bold text-gray-800">${project.budgetSource || '-'}</p>
                     </div>
                     
                     <div class="md:col-span-2 bg-gray-50 p-4 rounded-xl border border-gray-100">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">สถานะงาน</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">ประเภทงาน</p>
                         <p class="text-sm font-bold text-blue-600">${project.workStatus}</p>
                     </div>
                 </div>
