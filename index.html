@@ -274,7 +274,7 @@
                 id="card4-container">
                 <div class="flex items-center gap-2 mb-3">
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-widest" id="card4-title">
-                        สถานะการดำเนินงานตาม FS</p>
+                        สถานะการดำเนินงาน (ตาม FS / ตามจริง)</p>
                 </div>
                 <div class="grid grid-cols-1 gap-2 overflow-y-auto max-h-[300px] custom-scrollbar" id="card4-content">
                     <!-- Dynamic content will be injected here -->
@@ -607,6 +607,8 @@
                 }
 
                 if (isBudgetMatch(d, filterVal) && matchesCardScope) {
+                    const useActual = activeCard2Filter;
+
                     // จัดสรรเข้าโครงการแล้ว
                     if (d.projectStatus.includes('จัดสรรเข้าโครงการแล้ว') || d.projectStatus.includes('จัดสรรงานเข้าโครงการแล้ว')) {
                         countAllocated++;
@@ -622,20 +624,20 @@
                     // ยกเลิกงาน
                     else if (d.projectStatus.includes('ยกเลิกงาน') || d.projectStatus.includes('ยกเลิก')) {
                         countCancelled++;
-                        kmCancelled += d.km;
-                        budgetCancelled += d.budget;
+                        kmCancelled += useActual ? d.kmAF : d.km;
+                        budgetCancelled += useActual ? d.budgetAG : d.budget;
                     }
                     // เปลี่ยนไปดำเนินการในงานย่อย
                     else if (d.projectStatus.includes('เปลี่ยนไปดำเนินการในงานย่อย')) {
                         countSubTask++;
-                        kmSubTask += d.km;
-                        budgetSubTask += d.budget;
+                        kmSubTask += useActual ? d.kmAF : d.km;
+                        budgetSubTask += useActual ? d.budgetAG : d.budget;
                     }
                     // ยังไม่ได้จัดสรรเข้าโครงการ
                     else if (d.projectStatus.includes('ยังไม่ได้จัดสรรเข้าโครงการ') || d.projectStatus.includes('ยังไม่ได้จัดสรรงานเข้าโครงการ')) {
                         countPending++;
-                        kmPending += d.km;
-                        budgetPending += d.budget;
+                        kmPending += useActual ? d.kmAF : d.km;
+                        budgetPending += useActual ? d.budgetAG : d.budget;
                     }
                 }
             });
@@ -682,11 +684,11 @@
                 }
 
                 if (matchesCardScope && d.statusAE && d.statusAE !== '-' && d.statusAE !== '') {
-                    grouped[d.statusAE] = { count: 0, km: 0 };
+                    grouped[d.statusAE] = { count: 0, km: 0, budget: 0 };
                 }
             });
 
-            // 2. Accumulate counts and km for matched items
+            // 2. Accumulate counts, km, and budget for matched items
             allData.forEach(d => {
                 let matchesCardScope = false;
                 if (activeCard2Filter) {
@@ -700,10 +702,11 @@
                 if (isBudgetMatch(d, filterVal) && matchesCardScope) {
                     if (d.statusAE && d.statusAE !== '-' && d.statusAE !== '') {
                         if (!grouped[d.statusAE]) {
-                            grouped[d.statusAE] = { count: 0, km: 0 };
+                            grouped[d.statusAE] = { count: 0, km: 0, budget: 0 };
                         }
                         grouped[d.statusAE].count++;
-                        grouped[d.statusAE].km += d.km;
+                        grouped[d.statusAE].km += activeCard2Filter ? d.kmAF : d.km;
+                        grouped[d.statusAE].budget += activeCard2Filter ? d.budgetAG : d.budget;
                     }
                 }
             });
@@ -767,7 +770,9 @@
                                  ${key}
                                  ${isSelected ? '<i class="fas fa-check-circle text-blue-500 text-[10px]"></i>' : ''}
                              </h4>
-                             <p class="text-[10px] ${subtextClass} mt-0.5">ปริมาณงาน (H): <span class="font-bold">${stat.km.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> กม.</p>
+                             <p class="text-[10px] ${subtextClass} mt-0.5 leading-tight">
+                                 งาน: <span class="font-bold">${stat.km.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> กม. | งบ: <span class="font-bold">${stat.budget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> บาท
+                             </p>
                          </div>
                          <div class="text-lg font-black ${subtextClass}">${stat.count.toLocaleString()}</div>
                      </div>
